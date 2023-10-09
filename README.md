@@ -1,13 +1,15 @@
-# bf591-assignment-4
+# bf591-assignment-counts-data
 
-Skeleton repo for bf591 assignment 4
+Skeleton repo for bf591 assignment Counts Data
 
 ### Repo contains:
   - main.R
   - README.md
-  - example_report.html
+  - reference_report.html
   - report.Rmd
-  - verse_counts.tsv
+  - data/
+    - verse_counts.tsv
+    - test.tsv
 
 ## Note to Students
 
