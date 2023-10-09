@@ -3,10 +3,11 @@
 Skeleton repo for bf591 assignment Counts Data
 
 ### Repo contains:
-  - main.R
   - README.md
-  - reference_report.html
+  - main.R
+  - test_main.R
   - report.Rmd
+  - reference_report.html
   - data/
     - verse_counts.tsv
     - test.tsv
