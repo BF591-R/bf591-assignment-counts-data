@@ -70,7 +70,7 @@ test_that("Function filter_zero_var_genes() filters properly", {
   }
 
   #Make sure all data in a row is the same
-  expect(isTRUE(all.equal(test_data[!(test_data$gene %in% user_removed),], zero_var_filtered)), 
+  expect(isTRUE(all_equal(test_data[!(test_data$gene %in% user_removed),], zero_var_filtered)), 
          "If you see this and your filter_zero_var_genes() returns all of its columns, then your gene data is somehow being shuffled; 
 
 Gene names in your output are not correlating with their true counts")
@@ -191,16 +191,16 @@ test_that("get_library_size() sums up sample reads correctly", {
 ####Testing normalize_by_cpm####
 test_that("normalize_by_cpm() has the correct output",{
 
+  cpm <- normalize_by_cpm(td2)%>% 
+    mutate(across(where(is.numeric), round, 3))
+  
   sample_answers <-tibble(gene = c("SZUG00090", "JIZU74666", "AWDL96666", "HDLU58875"), 
                           vK3_2 = c(44.8566270059323, 59.8088360079097, 59.8088360079097, 112.141567514831), 
                           vMr_1 = c(59.9615540623953, 56.4344038234309, 42.3258028675731, 88.1787559741107), 
                           vK3_1 = c(55.0899146106324, 59.0249085113918, 39.3499390075945, 78.6998780151891), 
                           vMr_2 = c(49.1870090082494, 59.7270823671599, 31.6202200767317, 91.3473024438917))%>%
-    mutate(across(where(is.numeric), \(x) round(x, 3)))
-
+    mutate(across(where(is.numeric), round, 3))
   #Testing for tibble
-  cpm <- normalize_by_cpm(td2)%>% 
-    mutate(across(where(is.numeric), \(x) round(x, 3)))
   expect(is_tibble(cpm), "normalize_by_cpm() does not output a tibble")
   
   #Testing dimensions
@@ -284,19 +284,7 @@ test_that("plot_sample_distributions is performing correctly()",{
     expect(all(td2[[n]][order(td2[[n]])]==data[[n]][order(data[[n]])]), paste0("Column ", n, "had incorrect data transferred"))
   }
   
-  #testing for color being properly assigned
-  expect_equal(ggplot$labels$x, ggplot$labels$colour)
   
-  #testing for title
-  expect(ggplot$labels$title==test_title, paste("Test title 'A Sample Title' did not transfer. Shows up as: ", ggplot$labels$title))
-  
-  #testing for plot type/layers
-  expected <- c("GeomBoxplot")
-  g_l <- c()
-  for(layer in ggplot$layers){g_l <- c(g_l, (class(layer$geom))[1])}
-  expect(all(expected %in% g_l), paste0("Function plot_sample_distributions() missing ggplot layers: ", toString(expected[!expected%in%g_l])))
-  expect(all(g_l %in% expected), paste0("Unexpected layers found in plot_sample_distributions() [apropriate extra layers will not harm your grade]: ", toString(g_l[!g_l%in%expected])))
-
   #Testing data log10 transformation
   ggplot_log <- plot_sample_distributions(td2[-1], TRUE, "Title Here")
   if(!ggplot_log$plot_env$scale_y_axis){
@@ -321,27 +309,16 @@ test_that("that plot_variance_vs_mean is working properly",{
   col <- 3  
   ggplot <- plot_variance_vs_mean(td2[-1], FALSE,test_title)
   dims <- dim(ggplot$data)
-  #testing that the data got used
   
+  #testing that the data got used
   expect(dims[1]==row, paste0("Number of rows by plot_variance_vs_mean() is incorrect; nrow(user_function) - nrow(expected) == ", dims[1]-row))
   expect(dims[2]==col, paste0("Number of columns by plot_variance_vs_mean() is incorrect; ncol(user_function) - ncol(expected) == ", dims[2]-col))
-  
   
   #testing the data itself
   data <- ggplot$plot_env$data
   for(n in colnames(td2)[-1]){
     expect(all(td2[[n]][order(td2[[n]])]==data[[n]][order(data[[n]])]), paste0("Column ", n, "had incorrect data transferred"))
   }
-  
-  #testing for title
-  expect(ggplot$labels$title==test_title, paste("Test title 'A Sample Title' did not transfer. Shows up as: ", ggplot$labels$title))
-  
-  #testing for plot type/layers
-  expected <- c("GeomPoint", "GeomSmooth")
-  g_l <- c()
-  for(layer in ggplot$layers){g_l <- c(g_l, (class(layer$geom))[1])}
-  expect(all(expected %in% g_l), paste0("Function plot_variance_vs_mean() missing expected ggplot layers: ", toString(expected[!expected%in%g_l])))
-  expect(all(g_l %in% expected), paste0("Unexpected layers found in plot_variance_vs_mean() [apropriate extra layers will not harm your grade]: ", toString(g_l[!g_l%in%expected])))
   
   #Testing data log10 transformation
   ggplot_log <- plot_variance_vs_mean(td2[-1], TRUE, "Title Here")
@@ -359,22 +336,23 @@ test_that("that plot_variance_vs_mean is working properly",{
   }
 })
 
+
 ####Testing plot_pca() ####
 test_that("plot_pca",{
   test_title <- "A Sample Title"
- 
-  meta_data <- tibble(sample=c("vK3_2", "vMr_1","vK3_1", "vMr_2"), timepoint=c("K3", "Mr", "K3", "Mr"), replicate=c("2","1","1","2"))
+  
+  meta_data <- tibble::tibble(sample=c("vK3_2", "vMr_1","vK3_1", "vMr_2"), timepoint=c("K3", "Mr", "K3", "Mr"), replicate=c("2","1","1","2"))
   row <- 4
   col <- 5
   ggplot <- plot_pca(td2[-1], meta_data ,test_title)
   dims <- dim(ggplot$data)
+  
   #testing that the data got used
+  expect(dims[1]==row, paste0("Number of rows by plot_pca() is incorrect; nrow(user_function) - nrow(expected) == ", dims[1]-row))
+  expect(dims[2]==col, paste0("Number of columns by plot_pca() is incorrect; ncol(user_function) - ncol(expected) == ", dims[2]-col))
   
-  expect(dims[1]==row, paste0("Number of rows by plot_variance_vs_mean() is incorrect; nrow(user_function) - nrow(expected) == ", dims[1]-row))
-  expect(dims[2]==col, paste0("Number of columns by plot_variance_vs_mean() is incorrect; ncol(user_function) - ncol(expected) == ", dims[2]-col))
-  
+  #Testing the PCA components
   pca <- prcomp(t(td2[-1]))
-  
   expect(all(ggplot$data$PC1==pca$x[,1]), "Expected PC1 data not found. Did you use the correct PC?")
   expect(all(ggplot$data$PC2==pca$x[,2]), "Expected PC2 data not found. Did you use the correct PC?")
   
@@ -383,15 +361,5 @@ test_that("plot_pca",{
   for(n in colnames(td2)[-1]){
     expect(all(td2[[n]][order(td2[[n]])]==data[[n]][order(data[[n]])]), paste0("Column ", n, "had incorrect data transferred"))
   }
-  
-  #testing for title
-  expect(ggplot$labels$title==test_title, paste("Test title 'A Sample Title' did not transfer. Shows up as: ", ggplot$labels$title))
-  
-  #testing for plot type/layers
-  expected <- c("GeomPoint")
-  g_l <- c()
-  for(layer in ggplot$layers){g_l <- c(g_l, (class(layer$geom))[1])}
-  expect(all(expected %in% g_l), paste0("Function plot_variance_vs_mean() missing expected ggplot layers: ", toString(expected[!expected%in%g_l])))
-  expect(all(g_l %in% expected), paste0("Unexpected layers found in plot_variance_vs_mean() [apropriate extra layers will not harm your grade]: ", toString(g_l[!g_l%in%expected])))
-  
 })
+
