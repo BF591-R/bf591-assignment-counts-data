@@ -120,22 +120,41 @@ describe("meta_info_from_labels()", {
 })
 
 describe("get_library_size()", {
-  expected <- tibble("vK3_1" = 254130, 
-                     "vMr_2" = 284628,
-                     "vK3_2" = 267519, 
-                     "vMr_1" = 283515 )
+  expected1 <- tibble("vK3_1" = 254130, 
+                      "vMr_2" = 284628,
+                      "vK3_2" = 267519, 
+                      "vMr_1" = 283515 )
   
-  expected_vct <- expected %>% dplyr::slice(1) %>% unlist()
+  expected2 <- tibble(sample = c("vK3_1", "vMr_2", "vK3_2", "vMr_1"),
+                      value = c(254130,284628,267519,283515))
   
   lib_size <- get_library_size(test_data)
-  function_vct <- lib_size %>% dplyr::slice(1) %>% unlist()
+  dim_lib_size <- dim(lib_size)
   
   it("returns a tibble, not a dataframe and not a named vector", {
     expect_true(is_tibble(lib_size))
   })
-  it("returns the correct summed values for each column", {
-    expect_mapequal(expected_vct, function_vct)
+  
+  it("returns tibbles with either 4 rows and 2 columns, or 1 row and 4 columns", {
+    expect_true(xor(isTRUE(all.equal(dim_lib_size, c(1, 4))), isTRUE(all.equal(dim_lib_size, c(4, 2)))))
   })
+  
+  if(isTRUE(all.equal(dim_lib_size, c(1, 4)))) {
+    expected_vct <- expected1 %>% dplyr::slice(1) %>% unlist()
+    function_vct <- lib_size %>% dplyr::slice(1) %>% unlist()
+    
+    it("returns the correct summed values for each column if tibble 1x4", {
+      expect_mapequal(expected_vct, function_vct)
+    })
+    
+  } else if(isTRUE(all.equal(dim_lib_size, c(4, 2)))) {
+    expected_vct <- expected2 %>% pull(value, sample)
+    function_vct <- lib_size %>% pull(value, sample)
+    
+    it("returns the correct summed values for each column if tibble 4x2", {
+      expect_mapequal(expected_vct, function_vct)
+    })
+  }
 })
 
 describe("normalize_by_cpm()", {

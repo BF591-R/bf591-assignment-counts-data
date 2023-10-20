@@ -261,7 +261,7 @@
       "points": 1
     },
     {
-      "name": "get_library_size(): returns the correct summed values for each column",
+      "name": "get_library_size(): returns tibbles with either 4 rows and 2 columns, or 1 row and 4 columns",
       "setup": "awk -F '\t' '$1 == 27 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
       "run": "awk -F '\t' '$1 == 27 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
       "input": "",
@@ -271,7 +271,7 @@
       "points": 1
     },
     {
-      "name": "normalize_by_cpm(): returns a tibble, not a dataframe",
+      "name": "get_library_size(): returns the correct summed values for each column if tibble 1x4",
       "setup": "awk -F '\t' '$1 == 28 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
       "run": "awk -F '\t' '$1 == 28 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
       "input": "",
@@ -281,7 +281,7 @@
       "points": 1
     },
     {
-      "name": "normalize_by_cpm(): returns exactly 1000 rows and 5 columns",
+      "name": "normalize_by_cpm(): returns a tibble, not a dataframe",
       "setup": "awk -F '\t' '$1 == 29 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
       "run": "awk -F '\t' '$1 == 29 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
       "input": "",
@@ -291,7 +291,7 @@
       "points": 1
     },
     {
-      "name": "normalize_by_cpm(): should contain all the genes found in the original",
+      "name": "normalize_by_cpm(): returns exactly 1000 rows and 5 columns",
       "setup": "awk -F '\t' '$1 == 30 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
       "run": "awk -F '\t' '$1 == 30 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
       "input": "",
@@ -301,7 +301,7 @@
       "points": 1
     },
     {
-      "name": "normalize_by_cpm(): should correctly calculate CPM, testing a subset of known values",
+      "name": "normalize_by_cpm(): should contain all the genes found in the original",
       "setup": "awk -F '\t' '$1 == 31 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
       "run": "awk -F '\t' '$1 == 31 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
       "input": "",
@@ -311,7 +311,7 @@
       "points": 1
     },
     {
-      "name": "deseq_normalize(): returns a tibble, not a dataframe",
+      "name": "normalize_by_cpm(): should correctly calculate CPM, testing a subset of known values",
       "setup": "awk -F '\t' '$1 == 32 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
       "run": "awk -F '\t' '$1 == 32 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
       "input": "",
@@ -321,7 +321,7 @@
       "points": 1
     },
     {
-      "name": "deseq_normalize(): returns a tibble with exactly 1000 rows and 5 columns",
+      "name": "deseq_normalize(): returns a tibble, not a dataframe",
       "setup": "awk -F '\t' '$1 == 33 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
       "run": "awk -F '\t' '$1 == 33 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
       "input": "",
@@ -331,7 +331,7 @@
       "points": 1
     },
     {
-      "name": "deseq_normalize(): should have the same number of genes as the raw data",
+      "name": "deseq_normalize(): returns a tibble with exactly 1000 rows and 5 columns",
       "setup": "awk -F '\t' '$1 == 34 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
       "run": "awk -F '\t' '$1 == 34 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
       "input": "",
@@ -341,9 +341,19 @@
       "points": 1
     },
     {
-      "name": "deseq_normalize(): should correctly perform DESeq2 normalization, testing a subset of known values",
+      "name": "deseq_normalize(): should have the same number of genes as the raw data",
       "setup": "awk -F '\t' '$1 == 35 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
       "run": "awk -F '\t' '$1 == 35 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
+      "input": "",
+      "output": "",
+      "comparison": "exact",
+      "timeout": 10,
+      "points": 1
+    },
+    {
+      "name": "deseq_normalize(): should correctly perform DESeq2 normalization, testing a subset of known values",
+      "setup": "awk -F '\t' '$1 == 36 { print \"testnum:\", $1, \"\\nresult:\", $2, \"\\ntest:\", $3, \"\\nmessage:\", $4; exit}' test_results.csv",
+      "run": "awk -F '\t' '$1 == 36 { print; exit}' test_results.csv | grep -q -e 'success' -e 'warning'",
       "input": "",
       "output": "",
       "comparison": "exact",
