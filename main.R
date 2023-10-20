@@ -96,9 +96,8 @@ meta_info_from_labels <- function(sample_names) {
 #' @param count_data tibble: a (n x 1+m) tibble with a 'gene' column followed
 #' by m raw counts columns of read counts
 #'
-#' @return tibble or named vector of read totals from each sample. Vectors must
-#' be length `_S_ `, a tibble can be `(1 x _S_)` with sample names as columns
-#' names OR `(_S_ x 2)` with columns ("sample", "value")
+#' @return tibble of read totals from each sample. A tibble can be `(1 x _S_)` 
+#' with sample names as columns names OR `(_S_ x 2)` with columns ("sample", "value")
 #'
 #' @examples `get_library_size(count_data)`
 
