@@ -2,7 +2,7 @@
 
 ## Notes for this assignment
 
-For this and all future assignments, you will now have to code your markdown 
+For this and all future assignments, you will now have to **code** your markdown 
 file in addition to the main.R functions. The report.Rmd file still has the same 
 background and assignment information included and the R code blocks are created, 
 just like in previous assignments, but from now on they will devoid of code.
